@@ -2,26 +2,39 @@
 
 Personal portfolio of Saksham Mittal — software engineer and full-stack developer.
 
-- **`index.html`** — main page: hero, résumé viewer, about, skills, experience, education, projects, honors, and contact.
-- **`projects.dc.html`** — all projects in a grid.
-- **`coursework.dc.html`** — full B.Tech. coursework, semester by semester.
-- **`support.js`** — the dc-runtime that renders the `<x-dc>` templates with React (generated file; do not edit by hand).
-- **`assets/`** — images and skill icons.
-- **`Saksham-Mittal-Resume.pdf`** — current résumé, embedded on the main page.
+Plain, static HTML/CSS/JS. No build step, no framework, no runtime CDN
+dependency — every page renders instantly and works with JavaScript disabled.
+
+## Structure
+
+- **`index.html`** — main page: hero, résumé, about, skills, experience, education, projects, honors, contact.
+- **`projects.html`** — all projects in a grid.
+- **`coursework.html`** — full B.Tech. coursework, semester by semester.
+- **`site.css`** — shared theme tokens (dark/light on `<html>`), reveal + hover styles.
+- **`site.js`** — vanilla JS: theme toggle, mobile nav, scroll-spy, ambient glows, drag carousels, copy-to-clipboard. Each feature no-ops on pages that lack its elements.
+- **`assets/`** — images, skill icons, and `resume-preview.png` (first page of the résumé).
+- **`Saksham-Mittal-Resume.pdf`** — current résumé (previewed as an image on the main page, downloadable).
 
 ## Running locally
 
-The pages fetch sibling templates and the résumé PDF, so serve the directory over HTTP rather than opening the files directly:
+Serve the directory over HTTP (relative asset paths):
 
 ```sh
 python3 -m http.server 8000
-# then open http://localhost:8000
+# open http://localhost:8000
 ```
+
+Opening `index.html` directly via `file://` also works, since there's no
+runtime fetching.
 
 ## Notes
 
-- Pages are rendered client-side by `support.js` (React 18 from unpkg, pinned with SRI hashes). JavaScript is required.
-- The dark/light theme toggle persists the choice in `localStorage` under `sm-theme`.
+- Theme choice is remembered in `localStorage` (`sm-theme`) and applied before
+  first paint by a tiny inline script, so navigating between pages never flashes.
+- Fonts load from Google Fonts; everything else is local.
+- The résumé preview image is regenerated from the PDF with
+  [`pypdfium2`](https://pypi.org/project/pypdfium2/) + Pillow when the résumé
+  changes (grayscale, 16-color, ~130 KB).
 
 ## Contact
 
