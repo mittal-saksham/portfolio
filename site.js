@@ -217,41 +217,56 @@
     function measure() { setWidth = track.scrollWidth / 3; }
     measure();
     window.addEventListener("resize", measure);
-    var BASE = speed || 0.45, FRICTION = 0.06;
+    var BASE = speed || 0.45, FRICTION = 0.06, DRAG_THRESHOLD = 4;
     var offset = setWidth, velocity = BASE;
-    var hovering = false, dragging = false;
-    var lastX = 0, lastT = 0, dragVel = 0, movedDist = 0;
+    // motion pauses while the mouse hovers (desktop) OR a pointer is held down
+    // (so a tap doesn't chase a moving link); a real drag starts only once the
+    // pointer moves past DRAG_THRESHOLD, leaving plain taps/clicks to reach the
+    // links underneath.
+    var hovering = false, pressing = false, dragging = false;
+    var lastX = 0, lastT = 0, dragVel = 0, movedDist = 0, pointerId = null;
     function tick() {
-      if (!dragging && !hovering) { offset += velocity; velocity += (BASE - velocity) * FRICTION; }
+      if (!dragging && !hovering && !pressing) { offset += velocity; velocity += (BASE - velocity) * FRICTION; }
       if (offset >= setWidth * 2) offset -= setWidth;
       if (offset < 0) offset += setWidth;
       track.style.transform = "translateX(" + (-offset) + "px)";
       requestAnimationFrame(tick);
     }
     if (!reduce) requestAnimationFrame(tick);
-    viewport.addEventListener("pointerenter", function () { hovering = true; });
-    viewport.addEventListener("pointerleave", function () { hovering = false; });
+    viewport.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hovering = true; });
+    viewport.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hovering = false; });
     viewport.addEventListener("pointerdown", function (e) {
-      dragging = true; viewport.style.cursor = "grabbing";
-      viewport.setPointerCapture(e.pointerId);
-      lastX = e.clientX; lastT = performance.now(); dragVel = 0; movedDist = 0;
+      if (e.button != null && e.button !== 0) return; // ignore right/middle click
+      pressing = true; dragging = false; movedDist = 0; dragVel = 0;
+      lastX = e.clientX; lastT = performance.now(); pointerId = e.pointerId;
     });
     viewport.addEventListener("pointermove", function (e) {
-      if (!dragging) return;
+      if (!pressing) return;
       var dx = e.clientX - lastX;
-      var now = performance.now(), dt = Math.max(now - lastT, 1);
-      offset -= dx; movedDist += Math.abs(dx);
-      dragVel = -dx / dt * 16; lastX = e.clientX; lastT = now;
+      movedDist += Math.abs(dx);
+      if (!dragging && movedDist > DRAG_THRESHOLD) {
+        dragging = true; viewport.style.cursor = "grabbing";
+        try { viewport.setPointerCapture(pointerId); } catch (err) {}
+      }
+      if (dragging) {
+        var now = performance.now(), dt = Math.max(now - lastT, 1);
+        offset -= dx; dragVel = -dx / dt * 16; lastT = now;
+      }
+      lastX = e.clientX;
     });
     function endDrag() {
-      if (!dragging) return;
-      dragging = false; viewport.style.cursor = "grab";
-      velocity = Math.abs(dragVel) > BASE ? dragVel : BASE;
+      if (!pressing) return;
+      pressing = false;
+      if (dragging) {
+        dragging = false; viewport.style.cursor = "grab";
+        velocity = Math.abs(dragVel) > BASE ? dragVel : BASE;
+      }
     }
     viewport.addEventListener("pointerup", endDrag);
     viewport.addEventListener("pointercancel", endDrag);
+    // only cancel the click that ends a real drag; genuine taps pass through
     track.addEventListener("click", function (e) {
-      if (movedDist > 6) { e.preventDefault(); e.stopPropagation(); }
+      if (movedDist > DRAG_THRESHOLD) { e.preventDefault(); e.stopPropagation(); }
     }, true);
   }
   setupCarousel("sm-proj-track", "sm-proj-viewport", 0.45);
