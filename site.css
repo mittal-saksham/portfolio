@@ -1,0 +1,73 @@
+/* Shared theme + interaction styles for all pages.
+   Theme variables live on <html> so every page (and the pre-paint script in
+   <head>) can switch dark/light without a flash. */
+
+:root{
+  --accent-grad:linear-gradient(135deg,#5E9BFF,#2F6BE0);
+  --glow:rgba(77,141,255,.5);
+  --orange:#4D8DFF;
+  --orange-hover:#74A8FF;
+  --orange-deep:#2F6BE0;
+  --on-orange:#07142B;
+  --bg:#0B1019;
+  --surface:#141C28;
+  --surface-2:#1E2937;
+  --fg:#EAF1FA;
+  --fg-body:#AEBED1;
+  --fg-muted:#7E90A8;
+  --border:rgba(234,241,250,.08);
+  --border-strong:rgba(234,241,250,.14);
+  --chip-bg:rgba(77,141,255,.14);
+  --chip-bd:rgba(77,141,255,.45);
+  --badge-bg:rgba(77,141,255,.16);
+  --ring:rgba(77,141,255,.30);
+}
+html[data-theme="light"]{
+  --accent-grad:linear-gradient(135deg,#3D7BEA,#2257C9);
+  --glow:rgba(47,107,224,.30);
+  --orange:#2F6BE0;
+  --orange-hover:#4D8DFF;
+  --orange-deep:#2257C9;
+  --on-orange:#EAF2FF;
+  --bg:#F3F6FB;
+  --surface:#FFFFFF;
+  --surface-2:#E6EDF7;
+  --fg:#0E1A2B;
+  --fg-body:#41526A;
+  --fg-muted:#6C7E96;
+  --border:rgba(14,26,43,.10);
+  --border-strong:rgba(14,26,43,.16);
+  --chip-bg:rgba(47,107,224,.10);
+  --chip-bd:rgba(47,107,224,.40);
+  --badge-bg:rgba(47,107,224,.10);
+  --ring:rgba(47,107,224,.26);
+}
+html,body{background:var(--bg)}
+
+/* Reveal-on-scroll: only hide content when JS is running (html.js),
+   so no-JS visitors still see everything. */
+html.js [data-reveal]{opacity:0;transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+html.js [data-reveal][data-reveal-up]{transform:translateY(28px)}
+html.js [data-reveal].sm-revealed{opacity:1;transform:none}
+
+/* Controls that only make sense with JS (theme toggle, menu toggle, back-to-top). */
+html:not(.js) .js-only{display:none !important}
+/* Without JS the carousels can't auto-scroll — let them scroll natively. */
+html:not(.js) .sm-viewport{overflow-x:auto}
+
+/* Hover styles extracted from the old style-hover attributes. */
+[data-hv="hv1"]:hover{filter:brightness(1.08);transform:translateY(-2px)}
+[data-hv="hv2"]:hover{border-color:var(--orange);color:var(--orange);transform:rotate(-25deg)}
+[data-hv="hv3"]:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+[data-hv="hv4"]:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px var(--glow)}
+[data-hv="hv5"]:hover{color:var(--orange);transform:translateY(-2px)}
+[data-hv="hv6"]:hover{background:var(--badge-bg);color:var(--orange)}
+[data-hv="hv7"]:hover{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 10%,var(--surface-2));transform:translateY(-3px);box-shadow:0 12px 26px -14px var(--orange)}
+[data-hv="hv8"]:hover{background:color-mix(in srgb,var(--orange) 30%,var(--surface-2));border-color:var(--orange);color:var(--on-orange);box-shadow:0 0 16px -2px var(--orange);transform:translateY(-2px)}
+[data-hv="hv9"]:hover{background:var(--surface-2);border-color:var(--chip-bd);transform:translateY(-5px);box-shadow:0 18px 40px -22px var(--orange)}
+[data-hv="hv10"]:hover{background:var(--surface-2);border-color:var(--chip-bd);transform:translateY(-6px);box-shadow:0 22px 55px -24px color-mix(in srgb,var(--orange) 65%,transparent)}
+[data-hv="hv11"]:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 12px 28px -18px var(--orange)}
+[data-hv="hv12"]:hover{background:rgba(255,255,255,.18)}
+[data-hv="hv13"]:hover{filter:brightness(1.08)}
+[data-hv="hv14"]:hover{color:var(--orange)}
+[data-hv="hv15"]:hover{border-color:var(--orange);transform:translateY(-2px)}
