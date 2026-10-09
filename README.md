@@ -1,7 +1,7 @@
 # Saksham Mittal — Portfolio
 
 Personal portfolio of Saksham Mittal - software engineer and full-stack developer.
-
+Deployed at [sakshammittal.vercel.app](https://sakshammittal.vercel.app).
 
 ## Structure
 
@@ -11,10 +11,18 @@ Personal portfolio of Saksham Mittal - software engineer and full-stack develope
 - **`site.css`** — shared theme tokens (dark/light on `<html>`), reveal + hover styles.
 - **`site.js`** — vanilla JS: theme toggle, mobile nav, scroll-spy, ambient glows, drag carousels, copy-to-clipboard. Each feature no-ops on pages that lack its elements.
 - **`assets/`** — images, skill icons, and `resume-preview.png` (first page of the résumé).
-- **`Saksham-Mittal-Resume.pdf`** — current résumé (previewed as an image on the main page, downloadable).
+- **`Saksham_Resume.pdf`** — current résumé (previewed as an image on the main page, downloadable).
 
+## Local preview
 
+```bash
+python3 -m http.server 8080
+# open http://localhost:8080
+```
 
+## Deploy
+
+Pushed to Vercel from this repo (static, no build step).
 
 ## Contact
 
