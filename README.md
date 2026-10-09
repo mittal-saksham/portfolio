@@ -1,9 +1,7 @@
 # Saksham Mittal — Portfolio
 
-Personal portfolio of Saksham Mittal — software engineer and full-stack developer.
+Personal portfolio of Saksham Mittal - software engineer and full-stack developer.
 
-Plain, static HTML/CSS/JS. No build step, no framework, no runtime CDN
-dependency — every page renders instantly and works with JavaScript disabled.
 
 ## Structure
 
@@ -15,26 +13,8 @@ dependency — every page renders instantly and works with JavaScript disabled.
 - **`assets/`** — images, skill icons, and `resume-preview.png` (first page of the résumé).
 - **`Saksham-Mittal-Resume.pdf`** — current résumé (previewed as an image on the main page, downloadable).
 
-## Running locally
 
-Serve the directory over HTTP (relative asset paths):
 
-```sh
-python3 -m http.server 8000
-# open http://localhost:8000
-```
-
-Opening `index.html` directly via `file://` also works, since there's no
-runtime fetching.
-
-## Notes
-
-- Theme choice is remembered in `localStorage` (`sm-theme`) and applied before
-  first paint by a tiny inline script, so navigating between pages never flashes.
-- Fonts load from Google Fonts; everything else is local.
-- The résumé preview image is regenerated from the PDF with
-  [`pypdfium2`](https://pypi.org/project/pypdfium2/) + Pillow when the résumé
-  changes (grayscale, 16-color, ~130 KB).
 
 ## Contact
 
